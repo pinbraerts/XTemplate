@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "Field.h"
+#include "Layout.h"
 
 class Game: public RectangleShape {
 protected:
@@ -90,9 +91,13 @@ public:
     }
 
     void render() {
-        right_field.draw(dc);
-        left_field.draw(dc);
-        button.draw(dc);
+        // right_field.draw(dc);
+        // left_field.draw(dc);
+        // button.draw(dc);
+        Layout {
+            Button { 10, 10, 100, 50 },
+            Button { 120, 10, 100, 50 }
+        }.draw(dc);
     }
 
     void mouseMove(const Point& cursor) {
