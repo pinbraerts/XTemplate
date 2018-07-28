@@ -3,8 +3,6 @@
 
 #include "base.h"
 
-#include <cmath>
-
 struct Vector2D: XPoint {
     Vector2D operator+(const XPoint& other) const {
         return { (short)(x + other.x), (short)(y + other.y) };

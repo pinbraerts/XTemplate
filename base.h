@@ -3,7 +3,10 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+
 #include <type_traits>
+#include <tuple>
+#include <cmath>
 
 constexpr short NUM = 10;
 constexpr short SEGMENTS_NUM = NUM + 1;
