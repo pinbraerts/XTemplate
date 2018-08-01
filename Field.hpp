@@ -27,7 +27,7 @@ struct MyCell {
         default:
         if(type & Filled) {
             dc.setForeground(0);
-            constexpr short line = 3; // TODO: change to set bold line
+            constexpr Coord_t line = 3; // TODO: change to set bold line
             dc.fillRectangle(
                 shape.x, shape.y,
                 line + 1, shape.height
@@ -75,7 +75,7 @@ struct FieldBase: Grid<MyCell, NUM, NUM, true>,
         { 0, 0, cell_width(), cell_height() }
     } { }
 
-    bool clicked(Point cursor, unsigned short btn) {
+    bool clicked(Point cursor, Size_t btn) {
         if(getCellIndex(cursor)) {
             auto& t = cells[cursor.x][cursor.y].type;
             if(t & MyCell::Filled) {
@@ -122,7 +122,7 @@ struct ButtonBase: RectangleShape,
         const RectangleShape& other
     ): RectangleShape { other, other.size(), other.size() / 2 } { }
 
-    bool clicked(const Point& cursor, unsigned short btn) {
+    bool clicked(const Point& cursor, Size_t btn) {
         std::cout << "Clicked" << std::endl;
     }
 

@@ -10,11 +10,11 @@ protected:
     Layout<FieldBase, FieldBase, ButtonBase> layout {
         Field { x, y },
         Field {
-            (short)(x + 220), y
+            (Coord_t)(x + 220), y
         },
         Button {
-            (short)(x + 210),
-            (short)(y + 240),
+            (Coord_t)(x + 210),
+            (Coord_t)(y + 240),
             100, 40
         }
     };
@@ -22,7 +22,7 @@ protected:
     Atom wmDeleteMessage;
 
 public:
-    Game(short x0, short y0):
+    Game(Coord_t x0, Coord_t y0):
         RectangleShape { x0, y0, 440, 250 }
     {
         dc.d = XOpenDisplay(nullptr);
@@ -76,13 +76,13 @@ public:
                 }
                 break;
             case ButtonPress:
-                buttonPressed({ (short)e.xbutton.x, (short)e.xbutton.y }, e.xbutton.button);
+                buttonPressed({ (Coord_t)e.xbutton.x, (Coord_t)e.xbutton.y }, e.xbutton.button);
                 break;
             case ButtonRelease:
-                buttonReleased({ (short)e.xbutton.x, (short)e.xbutton.y }, e.xbutton.button);
+                buttonReleased({ (Coord_t)e.xbutton.x, (Coord_t)e.xbutton.y }, e.xbutton.button);
                 break;
             case MotionNotify:
-                mouseMove({ (short)e.xmotion.x, (short)e.xmotion.y });
+                mouseMove({ (Coord_t)e.xmotion.x, (Coord_t)e.xmotion.y });
                 break;
             }
             if(!running) break;
@@ -100,11 +100,11 @@ public:
         requestRender = layout.clip(cursor) || requestRender;
     }
 
-    void buttonPressed(const Point& cursor, unsigned short btn) {
+    void buttonPressed(const Point& cursor, Size_t btn) {
         requestRender = layout.press(cursor, btn) || requestRender;
     }
 
-    void buttonReleased(const Point& cursor, unsigned short btn) {
+    void buttonReleased(const Point& cursor, Size_t btn) {
         requestRender = layout.release(cursor, btn) || requestRender;
     }
 

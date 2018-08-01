@@ -62,14 +62,14 @@ struct _bbase {
 };
 
 mixin Clickable: _bbase {
-    bool press(const Point& cursor, unsigned short btn) {
+    bool press(const Point& cursor, Size_t btn) {
         if(self.hovered) {
             if(!pressed)
                 return pressed = true;
         }
         return false;
     }
-    bool release(const Point& cursor, unsigned short btn) {
+    bool release(const Point& cursor, Size_t btn) {
         if(pressed) {
             pressed = false;
             if(self.hovered)

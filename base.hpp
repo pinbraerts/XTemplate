@@ -8,9 +8,9 @@
 #include <tuple>
 #include <cmath>
 
-constexpr short NUM = 10;
-constexpr short SEGMENTS_NUM = NUM + 1;
-constexpr unsigned short CELL_WIDTH = 20;
+constexpr Coord_t NUM = 10;
+constexpr Coord_t SEGMENTS_NUM = NUM + 1;
+constexpr Size_t CELL_WIDTH = 20;
 
 struct DrawContext {
     Display* d;
@@ -26,7 +26,7 @@ struct DrawContext {
             rect.x, rect.y, rect.width, rect.height
         );
     }
-    inline void drawRectangle(short x, short y, short wi, short h) {
+    inline void drawRectangle(Coord_t x, Coord_t y, Coord_t wi, Coord_t h) {
         XDrawRectangle(d, w, gc, x, y, wi, h);
     }
     inline void fillRectangle(const XRectangle& rect) {
@@ -35,10 +35,10 @@ struct DrawContext {
             rect.x, rect.y, rect.width, rect.height
         );
     }
-    inline void fillRectangle(short x, short y, short wi, short h) {
+    inline void fillRectangle(Coord_t x, Coord_t y, Coord_t wi, Coord_t h) {
         XFillRectangle(d, w, gc, x, y, wi, h);
     }
-    inline void drawLine(short x1, short y1, short x2, short y2) {
+    inline void drawLine(Coord_t x1, Coord_t y1, Coord_t x2, Coord_t y2) {
         XDrawLine(d, w, gc, x1, y1, x2, y2);
     }
     inline void drawLine(const XPoint& point1, const XPoint& point2) {
@@ -50,7 +50,7 @@ struct DrawContext {
     template<size_t N> inline void drawSegments(XSegment(&seg)[N]) {
         drawSegments(seg, length(seg));
     }
-    inline void drawPoint(short x, short y) {
+    inline void drawPoint(Coord_t x, Coord_t y) {
         XDrawPoint(d, w, gc, x, y);
     }
     inline void drawPoint(const XPoint& point) {

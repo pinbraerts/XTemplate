@@ -22,8 +22,8 @@ public:
         height = cell_height() * vnum;
     }
 
-    inline const unsigned short& cell_width() const { return cell_shape.width; }
-    inline const unsigned short& cell_height() const { return cell_shape.height; }
+    inline const Size_t& cell_width() const { return cell_shape.width; }
+    inline const Size_t& cell_height() const { return cell_shape.height; }
 
     bool getCellIndex(Point& point) const {
         point.x -= x;
@@ -77,20 +77,20 @@ struct Grid<Cell, hnum, vnum, true>: GridBase<Cell, hnum, vnum> {
         RectangleShape::origin(other);
         fillGrid();
     }
-    void move(short dx, short dy) {
+    void move(Coord_t dx, Coord_t dy) {
         RectangleShape::move(dx, dy);
         fillGrid();
     }
 
     void fillGrid() {
         unsigned i = 0;
-        for(short dx = 0; dx <= width && i < length(grid); dx += cell_width(), ++i) {
-            short t = x + dx;
-            grid[i] = { t, y, t, (short)(y + height) };
+        for(Coord_t dx = 0; dx <= width && i < length(grid); dx += cell_width(), ++i) {
+            Coord_t t = x + dx;
+            grid[i] = { t, y, t, (Coord_t)(y + height) };
         }
-        for(short dy = 0; dy <= height && i < length(grid); dy += cell_height(), ++i) {
-            short t = y + dy;
-            grid[i] = { x, t, (short)(x + width), t };
+        for(Coord_t dy = 0; dy <= height && i < length(grid); dy += cell_height(), ++i) {
+            Coord_t t = y + dy;
+            grid[i] = { x, t, (Coord_t)(x + width), t };
         }
     }
 

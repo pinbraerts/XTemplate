@@ -3,9 +3,12 @@
 
 #include "base.h"
 
+using Coord_t = Coord_t;
+using Size_t = Size_t;
+
 struct Vector2D: XPoint {
     Vector2D operator+(const XPoint& other) const {
-        return { (short)(x + other.x), (short)(y + other.y) };
+        return { (Coord_t)(x + other.x), (Coord_t)(y + other.y) };
     }
     Vector2D& operator+() { return *this; }
     const Vector2D& operator+() const { return *this; }
@@ -17,9 +20,9 @@ struct Vector2D: XPoint {
     }
 
     Vector2D operator-(const Vector2D& other) const {
-        return { (short)(x - other.x), (short)(y - other.y) };
+        return { (Coord_t)(x - other.x), (Coord_t)(y - other.y) };
     }
-    Vector2D operator-() const { return { (short)-x, (short)-y }; }
+    Vector2D operator-() const { return { (Coord_t)-x, (Coord_t)-y }; }
 
     Vector2D& operator-=(const Vector2D& other) {
         x += other.x;
@@ -43,37 +46,28 @@ struct Point: XPoint {
         return *this;
     }
     Point operator+(const Vector2D& other) const {
-        return { (short)(x + other.x), (short)(y + other.y) };
+        return { (Coord_t)(x + other.x), (Coord_t)(y + other.y) };
     }
     Point operator-(const Vector2D& other) const {
-        return { (short)(x - other.x), (short)(y - other.y) };
+        return { (Coord_t)(x - other.x), (Coord_t)(y - other.y) };
     }
 };
 
 struct Size {
-    union {
-        struct {
-            unsigned short width;
-            unsigned short height;
-        };
-        Vector2D vec;
-    };
+    Size_t width;
+    Size_t height;
 
     Size(): width(0), height(0) {}
-    Size(unsigned short w, unsigned short h): width(w), height(h) {}
+    Size(Size_t w, Size_t h): width(w), height(h) {}
     Size(Size&& other): width(other.width), height(other.height) {}
     Size(const Size& other): width(other.width), height(other.height) {}
-    operator Vector2D&() {
-        return vec;
-    }
-    operator const Vector2D&() const {
-        return vec;
-    }
+    operator Vector2D&() { return vec; }
+    operator const Vector2D&() const { return vec; }
 
     Size operator*(double scale) const {
         return {
-            (short unsigned)(width * scale),
-            (short unsigned)(height * scale)
+            (Size_t)(width * scale),
+            (Size_t)(height * scale)
         };
     }
     Size& operator*=(double scale) {
@@ -83,8 +77,8 @@ struct Size {
     }
     Size operator/(double scale) const {
         return {
-            (short unsigned)(width / scale),
-            (short unsigned)(height / scale)
+            (Size_t)(width / scale),
+            (Size_t)(height / scale)
         };
     }
     Size& operator/=(double scale) {
@@ -114,33 +108,34 @@ struct Rectangle: XRectangle {
     }
 
     Point upper_left() const { return { x, y }; }
-    Point upper_right() const { return { (short)(x + width), y }; }
-    Point lower_left() const { return { x, (short)(y + height) }; }
+    Point upper_right() const { return { (Coord_t)(x + width), y }; }
+    Point lower_left() const { return { x, (Coord_t)(y + height) }; }
     Point lower_right() const {
-        return { (short)(x + width), (short)(y + height) };
+        return { (Coord_t)(x + width), (Coord_t)(y + height) };
     }
     Point center() const {
-        return { (short)(x + width / 2), (short)(y + height / 2) };
+        return { (Coord_t)(x + width / 2), (Coord_t)(y + height / 2) };
     }
 
-    Rectangle(short x0 = 0, short y0 = 0, unsigned short w = 0, unsigned short h = 0):
-        XRectangle { x0, y0, w, h } {}
-    Rectangle(const Point& orig, unsigned short w = 0, unsigned short h = 0):
+    // Rectangle(Coord_t x0 = 0, Coord_t y0 = 0, Size_t w = 0, Size_t h = 0):
+    //     XRectangle { x0, y0, w, h } {}
+    using XRectangle::XRectangle;
+    Rectangle(const Point& orig, Size_t w = 0, Size_t h = 0):
         XRectangle { orig.x, orig.y, w, h } {}
     Rectangle(const Point& orig, const Size& size):
         XRectangle { orig.x, orig.y, size.width, size.height } {}
-    Rectangle(short ox, short oy, const Size& size):
+    Rectangle(Coord_t ox, Coord_t oy, const Size& size):
         XRectangle { ox, oy, size.width, size.height } {}
 
-    void move(short dx, short dy) {
+    void move(Coord_t dx, Coord_t dy) {
         x += dx;
         y += dy;
     }
     Rectangle operator+(const Vector2D& other) {
-        return { (short)(x + other.x), (short)(y + other.y), width, height };
+        return { (Coord_t)(x + other.x), (Coord_t)(y + other.y), width, height };
     }
     Rectangle operator-(const Vector2D& other) {
-        return { (short)(x - other.x), (short)(y - other.y), width, height };
+        return { (Coord_t)(x - other.x), (Coord_t)(y - other.y), width, height };
     }
 
     Rectangle operator|(const Rectangle& other) const {
@@ -169,8 +164,12 @@ struct RectangleShape: Rectangle {
 
     Point origin() const { return Rectangle::origin() + offset; }
     void origin(const Point& other) { Rectangle::origin() = other - offset; }
-    void origin(const Rectangle& other) { Rectangle::origin() = other.origin() - offset; }
-    void origin(const RectangleShape& other) { Rectangle::origin() = other.origin() - offset; }
+    void origin(const Rectangle& other) {
+        Rectangle::origin() = other.origin() - offset;
+    }
+    void origin(const RectangleShape& other) {
+        Rectangle::origin() = other.origin() - offset;
+    }
 
     bool contains(Point point) const {
         point.x -= x;
@@ -185,7 +184,7 @@ struct RectangleShape: Rectangle {
     using Rectangle::Rectangle;
     RectangleShape(
         const Point& orig,
-        unsigned short w, unsigned short h,
+        Size_t w, Size_t h,
         const Vector2D& offs
     ): Rectangle { orig - offs, w, h }, offset(offs) { }
     RectangleShape(
