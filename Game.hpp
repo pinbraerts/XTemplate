@@ -10,11 +10,11 @@ protected:
     Layout<FieldBase, FieldBase, ButtonBase> layout {
         Field { x, y },
         Field {
-            (Coord_t)(x + 220), y
+            x + 220, y
         },
         Button {
-            (Coord_t)(x + 210),
-            (Coord_t)(y + 240),
+            x + 210,
+            y + 240,
             100, 40
         }
     };

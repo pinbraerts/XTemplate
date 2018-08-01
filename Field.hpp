@@ -93,7 +93,7 @@ struct FieldBase: Grid<MyCell, NUM, NUM, true>,
         unsigned ox, oy;
         getCellIndex(cursor, ox, oy);
         cursor.x = ox * cell_width();
-        cursor.y *= oy * cell_height();
+        cursor.y = oy * cell_height();
         cursor.x += x;
         cursor.y += y;
         if(focus.x != cursor.x || focus.y != cursor.y) {
