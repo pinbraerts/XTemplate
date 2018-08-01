@@ -65,12 +65,13 @@ struct FocusRect: RectangleShape {
     }
 };
 
-struct Field: Grid<MyCell, NUM, NUM, true>,
-    Clickable<Field>, Focusable<Field, FocusRect> {
+struct FieldBase: Grid<MyCell, NUM, NUM, true>,
+    Hoverable<FieldBase>,
+    Clickable<FieldBase>, Focusable<FieldBase, FocusRect> {
     using Base = Grid<MyCell, NUM, NUM, true>;
-    using FocusBase = Focusable<Field, FocusRect>;
+    using FocusBase = Focusable<FieldBase, FocusRect>;
 
-    Field(short x, short y): Base { { x, y } }, FocusBase {
+    FieldBase(const RectangleShape& init): Base(init), FocusBase {
         { 0, 0, cell_width(), cell_height() }
     } { }
 
@@ -107,25 +108,19 @@ struct Field: Grid<MyCell, NUM, NUM, true>,
     }
 };
 
-struct Button: RectangleShape, Clickable<Button> {
+using Field = Initializer<FieldBase>;
+
+struct ButtonBase: RectangleShape,
+    Hoverable<ButtonBase>, Clickable<ButtonBase> {
     enum Color {
         Black = 0,
         Blue = 100,
         LightBlue = 200
     };
 
-    Button(
-        const Point& orig,
-        const Size& s
-    ): RectangleShape { orig, s, s / 2 } { }
-    Button(
-        short x0, short y0,
-        unsigned short w, unsigned short h
-    ): RectangleShape {
-        { x0, y0 },
-        { w, h },
-        { (short)(w / 2), (short)(h / 2) }
-    } { }
+    ButtonBase(
+        const RectangleShape& other
+    ): RectangleShape { other, other.size(), other.size() / 2 } { }
 
     bool clicked(const Point& cursor, unsigned short btn) {
         std::cout << "Clicked" << std::endl;
@@ -147,5 +142,7 @@ struct Button: RectangleShape, Clickable<Button> {
         }
     }
 };
+
+using Button = Initializer<ButtonBase>;
 
 #endif // !FIELD_H

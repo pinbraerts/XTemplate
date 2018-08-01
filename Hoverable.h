@@ -29,17 +29,15 @@ template<class Origin, class Focus = Origin> struct Focusable: _fbase {
 
 mixin Focusable<Origin, Origin>: _fbase {};
 
-template<class T> constexpr bool is_focusable = std::is_convertible_v<T, _fbase>;
+template<class T> constexpr bool is_focusable = std::is_convertible_v<T*, _fbase*>;
 
 #define if_focus if constexpr(is_focusable<Origin>)
 
-struct _hbase {
+struct _hovbase {
     mutable bool hovered = false;
 };
 
-template<class T> constexpr bool is_hoverable = std::is_convertible_v<T, _hbase>;
-
-mixin Hoverable: _hbase {
+mixin Hoverable: _hovbase {
     bool clip(const Point& cursor) {
         bool res = hovered;
         if(self.contains(cursor)) {
@@ -57,13 +55,13 @@ mixin Hoverable: _hbase {
     }
 };
 
+template<class T> constexpr bool is_hoverable = std::is_convertible_v<T*, _hovbase*>;
+
 struct _bbase {
-    bool pressed = false;
+    mutable bool pressed = false;
 };
 
-template<class T> constexpr bool is_clickable = std::is_convertible_v<T, _hbase>;
-
-template<class Origin, bool hoverable> struct _clickable: _bbase {
+mixin Clickable: _bbase {
     bool press(const Point& cursor, unsigned short btn) {
         if(self.hovered) {
             if(!pressed)
@@ -81,8 +79,25 @@ template<class Origin, bool hoverable> struct _clickable: _bbase {
         return false;
     }
 };
-mixin _clickable<Origin, false>: Hoverable<Origin>, _clickable<Origin, true> { };
 
-umixin Clickable = _clickable<Origin, std::is_convertible_v<Origin, _hbase>>;
+template<class T> constexpr bool is_clickable = std::is_convertible_v<T*, _bbase*>;
+
+template<class T>
+struct Initializer: RectangleShape {
+    using Type = T;
+    using RectangleShape::RectangleShape;
+};
+template<class T>
+struct Initializer<Initializer<T>>: Initializer<T> {};
+
+template<class T> bool is_initializer = std::is_base_of_v<T, Initializer<T>>;
+
+template<class T, bool _> struct _deinit {
+    using res = T;
+};
+template<class T> struct _deinit<T, true> {
+    using res = typename T::Type;
+};
+template<class T> using deinit = typename _deinit<T, is_initializer<T>>::res;
 
 #endif // !HOVERABLE_H
