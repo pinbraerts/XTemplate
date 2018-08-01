@@ -7,25 +7,24 @@
 class Game: public RectangleShape {
 protected:
     DrawContext dc;
-    Field left_field, right_field;
-    Button button;
+    Layout<FieldBase, FieldBase, ButtonBase> layout {
+        Field { x, y },
+        Field {
+            (short)(x + 220), y
+        },
+        Button {
+            (short)(x + 210),
+            (short)(y + 240),
+            100, 40
+        }
+    };
     bool requestRender = false;
     Atom wmDeleteMessage;
 
 public:
     Game(short x0, short y0):
-        RectangleShape { x0, y0, 0, 0 },
-        left_field { x, y },
-        right_field { (short)(x + left_field.cell_width() + left_field.width), y },
-        button {
-            (short)(x + left_field.width + left_field.cell_width() / 2),
-            (short)(y + left_field.height + 2 * left_field.cell_height()),
-            (short unsigned)(left_field.cell_width() * 5),
-            (short unsigned)(left_field.cell_height() * 2)
-        }
+        RectangleShape { x0, y0, 440, 250 }
     {
-        width = left_field.width + left_field.cell_width() + right_field.width;
-        height = left_field.height;
         dc.d = XOpenDisplay(nullptr);
         int s = DefaultScreen(dc.d);
         dc.w = XCreateSimpleWindow(
@@ -94,26 +93,19 @@ public:
         // right_field.draw(dc);
         // left_field.draw(dc);
         // button.draw(dc);
-        Layout {
-            Button { 10, 10, 100, 50 },
-            Button { 120, 10, 100, 50 }
-        }.draw(dc);
+        layout.draw(dc);
     }
 
     void mouseMove(const Point& cursor) {
-        requestRender = left_field.clip(cursor) || requestRender;
-        requestRender = right_field.clip(cursor) || requestRender;
-        requestRender = button.clip(cursor) || requestRender;
+        requestRender = layout.clip(cursor) || requestRender;
     }
 
     void buttonPressed(const Point& cursor, unsigned short btn) {
-        requestRender = left_field.press(cursor, btn) || requestRender;
-        requestRender = button.press(cursor, btn) || requestRender;
+        requestRender = layout.press(cursor, btn) || requestRender;
     }
 
     void buttonReleased(const Point& cursor, unsigned short btn) {
-        requestRender = left_field.release(cursor, btn) || requestRender;
-        requestRender = button.release(cursor, btn) || requestRender;
+        requestRender = layout.release(cursor, btn) || requestRender;
     }
 
     ~Game() {
