@@ -92,12 +92,12 @@ struct Initializer<Initializer<T>>: Initializer<T> {};
 
 template<class T> bool is_initializer = std::is_base_of_v<T, Initializer<T>>;
 
-template<class T, bool _> struct _deinit {
+template<class T> struct _deinit {
     using res = T;
 };
-template<class T> struct _deinit<T, true> {
-    using res = typename T::Type;
+template<class T> struct _deinit<Initializer<T>> {
+    using res = T;
 };
-template<class T> using deinit = typename _deinit<T, is_initializer<T>>::res;
+template<class T> using deinit = typename _deinit<T>::res;
 
 #endif // !HOVERABLE_H
