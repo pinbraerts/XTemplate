@@ -4,32 +4,29 @@
 #include "Field.hpp"
 #include "Layout.hpp"
 
-class Game: public RectangleShape {
+template<class... Widgets>
+struct Game: Layout<Widgets...> {
+public:
+    using LBase = Layout<Widgets...>;
+    // template<class... Ws> Game(Ws&&... ws): LBase(ws...) { init(); }
+    using LBase::LBase;
+    using LBase::x;
+    using LBase::y;
+    using LBase::width;
+    using LBase::height;
+
 protected:
     DrawContext dc;
-    Layout<FieldBase, FieldBase, ButtonBase> layout {
-        Field { x, y },
-        Field {
-            x + 220, y
-        },
-        Button {
-            x + 210,
-            y + 240,
-            100, 40
-        }
-    };
     bool requestRender = false;
     Atom wmDeleteMessage;
 
 public:
-    Game(Coord_t x0, Coord_t y0):
-        RectangleShape { x0, y0, 440, 250 }
-    {
+    void init() {
         dc.d = XOpenDisplay(nullptr);
         int s = DefaultScreen(dc.d);
         dc.w = XCreateSimpleWindow(
             dc.d, RootWindow(dc.d, s),
-            10, 10, 600, 800,
+            10, 10, width + 20, height + 20,
             1, BlackPixel(dc.d, s), WhitePixel(dc.d, s)
         );
 
@@ -49,6 +46,7 @@ public:
     }
 
     void run() {
+        init(); // TODO: move init to constructor
         while(true) {
             XEvent e;
             bool running = true;
@@ -93,19 +91,19 @@ public:
         // right_field.draw(dc);
         // left_field.draw(dc);
         // button.draw(dc);
-        layout.draw(dc);
+        LBase::draw(dc);
     }
 
     void mouseMove(const Point& cursor) {
-        requestRender = layout.clip(cursor) || requestRender;
+        requestRender = LBase::clip(cursor) || requestRender;
     }
 
     void buttonPressed(const Point& cursor, Size_t btn) {
-        requestRender = layout.press(cursor, btn) || requestRender;
+        requestRender = LBase::press(cursor, btn) || requestRender;
     }
 
     void buttonReleased(const Point& cursor, Size_t btn) {
-        requestRender = layout.release(cursor, btn) || requestRender;
+        requestRender = LBase::release(cursor, btn) || requestRender;
     }
 
     ~Game() {
@@ -113,5 +111,7 @@ public:
         XCloseDisplay(dc.d);
     }
 };
+
+template<class... Widgets> Game(Widgets&&... ws) -> Game<deinit<Widgets>...>;
 
 #endif // !GAME_H
