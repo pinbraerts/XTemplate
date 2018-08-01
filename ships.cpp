@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "ships.hpp"
-#include "Layout.hpp"
+#include "core/Game.hpp"
+#include "Field.hpp"
 
 int main(int argc, char** argv) {
     Game game {

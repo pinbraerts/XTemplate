@@ -1,8 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Field.hpp"
-#include "Layout.hpp"
+#include "../widgets/Layout.hpp"
 
 template<class... Widgets>
 struct Game: Layout<Widgets...> {

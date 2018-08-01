@@ -1,7 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "DrawContext.hpp"
+#include "../core/DrawContext.hpp"
 
 template<class Cell, size_t hnum, size_t vnum>
 struct GridBase: RectangleShape {

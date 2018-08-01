@@ -1,8 +1,8 @@
 #ifndef FIELD_H
 #define FIELD_H
 
-#include "Grid.hpp"
-#include "Hoverable.hpp"
+#include "widgets/Grid.hpp"
+#include "core/Hoverable.hpp"
 
 struct MyCell {
     struct Shape: RectangleShape {

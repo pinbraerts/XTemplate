@@ -1,7 +1,7 @@
 #ifndef LAYOUT_H
 #define LAYOUT_H
 
-#include "Hoverable.hpp"
+#include "../core/Hoverable.hpp"
 
 template<class... Widgets>
 struct Layout: RectangleShape, std::tuple<Widgets...> {
@@ -12,7 +12,7 @@ struct Layout: RectangleShape, std::tuple<Widgets...> {
     template<class... Ws> Layout(Ws&&... w): Base(w...) {
         join();
     }
-    
+
     template<size_t N = Length - 1>
     inline void join() {
         clientRect() |= std::get<N>(*this).clientRect();
