@@ -1,7 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "Shape.hpp"
+#include "DrawContext.hpp"
 
 template<class Cell, size_t hnum, size_t vnum>
 struct GridBase: RectangleShape {
@@ -25,14 +25,14 @@ public:
     inline const Size_t& cell_width() const { return cell_shape.width; }
     inline const Size_t& cell_height() const { return cell_shape.height; }
 
-    bool getCellIndex(Point& point) const {
-        point.x -= x;
-        point.y -= y;
-        if(point.x < 0) point.x = x / cell_width() - 1;
-        else point.x /= cell_width();
-        if(point.y < 0) point.y = y / cell_height() - 1;
-        else point.y /= cell_height();
-        return point.x >= 0 && point.x < hnum && point.y >= 0 && point.y < vnum;
+    bool getCellIndex(const Point& point, unsigned& ox, unsigned& oy) const {
+        ox = static_cast<short>(point.x - x);
+        oy = static_cast<short>(point.y - y);
+        if(ox < 0) ox = ox / cell_width() - 1;
+        else ox /= cell_width();
+        if(oy < 0) oy = oy / cell_height() - 1;
+        else oy /= cell_height();
+        return ox >= 0 && ox < hnum && oy >= 0 && oy < vnum;
     }
 
     void draw(DrawContext& dc) {
@@ -85,12 +85,12 @@ struct Grid<Cell, hnum, vnum, true>: GridBase<Cell, hnum, vnum> {
     void fillGrid() {
         unsigned i = 0;
         for(Coord_t dx = 0; dx <= width && i < length(grid); dx += cell_width(), ++i) {
-            Coord_t t = x + dx;
-            grid[i] = { t, y, t, (Coord_t)(y + height) };
+            short t = x + dx;
+            grid[i] = { t, static_cast<short>(y), t, static_cast<short>(y + height) };
         }
         for(Coord_t dy = 0; dy <= height && i < length(grid); dy += cell_height(), ++i) {
-            Coord_t t = y + dy;
-            grid[i] = { x, t, (Coord_t)(x + width), t };
+            short t = y + dy;
+            grid[i] = { static_cast<short>(x), t, static_cast<short>(x + width), t };
         }
     }
 
