@@ -1,7 +1,7 @@
 #ifndef HOVERABLE_H
 #define HOVERABLE_H
 
-#include "Shape.h"
+#include "Shape.hpp"
 
 #define mixin template<class Origin> struct
 #define umixin template<class Origin> using

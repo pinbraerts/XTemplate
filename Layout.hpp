@@ -1,7 +1,7 @@
 #ifndef LAYOUT_H
 #define LAYOUT_H
 
-#include "Hoverable.h"
+#include "Hoverable.hpp"
 
 template<class... Widgets>
 struct Layout: std::tuple<Widgets...> {

@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "base.h"
+#include "base.hpp"
 
 struct Vector2D: XPoint {
     Vector2D operator+(const XPoint& other) const {
