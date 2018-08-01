@@ -24,7 +24,7 @@ public:
     }
 };
 
-#include "Game.h"
+#include "Game.hpp"
 
 
 #endif // !SHIPS_H

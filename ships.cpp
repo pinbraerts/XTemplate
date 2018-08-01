@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "ships.h"
-#include "Layout.h"
+#include "ships.hpp"
+#include "Layout.hpp"
 
 int main(int argc, char** argv) {
     Game { 20, 20 }.run();

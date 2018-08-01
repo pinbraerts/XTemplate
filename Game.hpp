@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Field.h"
-#include "Layout.h"
+#include "Field.hpp"
+#include "Layout.hpp"
 
 class Game: public RectangleShape {
 protected:

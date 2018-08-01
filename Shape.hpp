@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "base.h"
+#include "base.hpp"
 
 using Coord_t = Coord_t;
 using Size_t = Size_t;
