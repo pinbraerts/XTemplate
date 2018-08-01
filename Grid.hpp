@@ -11,13 +11,8 @@ public:
     using CShape = typename Cell::Shape;
     CShape cell_shape;
 
-    GridBase(const Point& orig, const Vector2D& offs = Vector2D::Zero()):
-        RectangleShape(orig, Size::Zero(), offs) {
-        width = cell_width() * hnum;
-        height = cell_height() * vnum;
-    }
-    GridBase(const Point& orig, const Vector2D& offs, const CShape& cshape):
-        RectangleShape(orig, Size::Zero(), offs), cell_shape(cshape) {
+    GridBase(const RectangleShape& orig):
+        RectangleShape(orig) {
         width = cell_width() * hnum;
         height = cell_height() * vnum;
     }
@@ -66,10 +61,7 @@ struct Grid<Cell, hnum, vnum, true>: GridBase<Cell, hnum, vnum> {
     using Base::y;
     using Base::offset;
 
-    Grid(
-        const Point& orig,
-        const Vector2D& offs = Vector2D::Zero()
-    ): Base { orig, offs } {
+    Grid(const RectangleShape& s): Base(s) {
         fillGrid();
     }
 
