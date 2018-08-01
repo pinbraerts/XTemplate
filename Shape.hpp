@@ -139,7 +139,7 @@ struct Rectangle: Point, Size {
         if(other.y < y) y = other.y;
         Point lr1 = lower_right(), lr2 = other.lower_right();
         if(lr2.x > lr1.x) width = lr2.x - x;
-        if(lr2.y > lr1.y) height = lr1.x - x;
+        if(lr2.y > lr1.y) height = lr2.y - y;
         return *this;
     }
 
