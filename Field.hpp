@@ -126,7 +126,7 @@ struct ButtonBase: RectangleShape,
 
     bool clicked(const Point& cursor, Size_t btn) {
         std::cout << "Clicked" << std::endl;
-        return false;
+        return true;
     }
 
     void draw(DrawContext& dc) {
