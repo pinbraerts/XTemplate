@@ -106,6 +106,12 @@ struct Rectangle: XRectangle {
     void origin(const Point& other) {
         origin() = other;
     }
+    Size& size() {
+        return *reinterpret_cast<Size*>(&width);
+    }
+    const Size& size() const {
+        return *reinterpret_cast<const Size*>(&width);
+    }
 
     Point upper_left() const { return { x, y }; }
     Point upper_right() const { return { (short)(x + width), y }; }
@@ -119,11 +125,11 @@ struct Rectangle: XRectangle {
 
     Rectangle(short x0 = 0, short y0 = 0, unsigned short w = 0, unsigned short h = 0):
         XRectangle { x0, y0, w, h } {}
-    Rectangle(const Point& orig, unsigned short w, unsigned short h):
+    Rectangle(const Point& orig, unsigned short w = 0, unsigned short h = 0):
         XRectangle { orig.x, orig.y, w, h } {}
-    Rectangle(const Point& orig, const Size& size = Size::Zero()):
+    Rectangle(const Point& orig, const Size& size):
         XRectangle { orig.x, orig.y, size.width, size.height } {}
-    Rectangle(short ox, short oy, const Size& size = Size::Zero()):
+    Rectangle(short ox, short oy, const Size& size):
         XRectangle { ox, oy, size.width, size.height } {}
 
     void move(short dx, short dy) {
@@ -135,6 +141,26 @@ struct Rectangle: XRectangle {
     }
     Rectangle operator-(const Vector2D& other) {
         return { (short)(x - other.x), (short)(y - other.y), width, height };
+    }
+
+    Rectangle operator|(const Rectangle& other) const {
+        Rectangle res = *this;
+        return res |= other;
+    }
+    Rectangle& operator|=(const Rectangle& other) {
+        if(other.x < x) x = other.x;
+        if(other.y < y) y = other.y;
+        Point lr1 = lower_right(), lr2 = other.lower_right();
+        if(lr2.x > lr1.x) width = lr2.x - x;
+        if(lr2.y > lr1.y) height = lr1.x - x;
+        return *this;
+    }
+
+    operator Point&() {
+        return origin();
+    }
+    operator const Point&() const {
+        return origin();
     }
 };
 
