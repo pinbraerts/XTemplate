@@ -25,7 +25,7 @@ struct Layout: std::tuple<Widgets...> {
     }
 
     template<size_t N = std::tuple_size_v<Base> - 1>
-    inline bool press(const Point& cursor, unsigned short btn) {
+    inline bool press(const Point& cursor, Size_t btn) {
         bool res = false;
         if constexpr(is_clickable<std::tuple_element_t<N, Base>>)
             res = std::get<N>(*this).press(cursor, btn) || res;
@@ -34,7 +34,7 @@ struct Layout: std::tuple<Widgets...> {
     }
 
     template<size_t N = std::tuple_size_v<Base> - 1>
-    inline bool release(const Point& cursor, unsigned short btn) {
+    inline bool release(const Point& cursor, Size_t btn) {
         bool res = false;
         if constexpr(is_clickable<std::tuple_element_t<N, Base>>)
             res = std::get<N>(*this).release(cursor, btn) || res;

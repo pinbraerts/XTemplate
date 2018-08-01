@@ -1,7 +1,7 @@
 #ifndef HOVERABLE_H
 #define HOVERABLE_H
 
-#include "Shape.hpp"
+#include "DrawContext.hpp"
 
 #define mixin template<class Origin> struct
 #define umixin template<class Origin> using
@@ -62,14 +62,14 @@ struct _bbase {
 };
 
 mixin Clickable: _bbase {
-    bool press(const Point& cursor, unsigned short btn) {
+    bool press(const Point& cursor, Size_t btn) {
         if(self.hovered) {
             if(!pressed)
                 return pressed = true;
         }
         return false;
     }
-    bool release(const Point& cursor, unsigned short btn) {
+    bool release(const Point& cursor, Size_t btn) {
         if(pressed) {
             pressed = false;
             if(self.hovered)

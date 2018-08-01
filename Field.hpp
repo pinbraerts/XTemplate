@@ -27,7 +27,7 @@ struct MyCell {
         default:
         if(type & Filled) {
             dc.setForeground(0);
-            constexpr short line = 3; // TODO: change to set bold line
+            constexpr Coord_t line = 3; // TODO: change to set bold line
             dc.fillRectangle(
                 shape.x, shape.y,
                 line + 1, shape.height
@@ -75,9 +75,10 @@ struct FieldBase: Grid<MyCell, NUM, NUM, true>,
         { 0, 0, cell_width(), cell_height() }
     } { }
 
-    bool clicked(Point cursor, unsigned short btn) {
-        if(getCellIndex(cursor)) {
-            auto& t = cells[cursor.x][cursor.y].type;
+    bool clicked(Point cursor, Size_t btn) {
+        unsigned ox, oy;
+        if(getCellIndex(cursor, ox, oy)) {
+            auto& t = cells[ox][oy].type;
             if(t & MyCell::Filled) {
                 t = (MyCell::Type)(MyCell::Crossed | t);
             } else {
@@ -89,9 +90,10 @@ struct FieldBase: Grid<MyCell, NUM, NUM, true>,
     }
 
     bool checkFocus(Point cursor) {
-        getCellIndex(cursor);
-        cursor.x *= cell_width();
-        cursor.y *= cell_height();
+        unsigned ox, oy;
+        getCellIndex(cursor, ox, oy);
+        cursor.x = ox * cell_width();
+        cursor.y = oy * cell_height();
         cursor.x += x;
         cursor.y += y;
         if(focus.x != cursor.x || focus.y != cursor.y) {
@@ -120,10 +122,11 @@ struct ButtonBase: RectangleShape,
 
     ButtonBase(
         const RectangleShape& other
-    ): RectangleShape { other, other.size(), other.size() / 2 } { }
+    ): RectangleShape { other.clientRect(), Vector2D(other.size() / 2) } { }
 
-    bool clicked(const Point& cursor, unsigned short btn) {
+    bool clicked(const Point& cursor, Size_t btn) {
         std::cout << "Clicked" << std::endl;
+        return false;
     }
 
     void draw(DrawContext& dc) {
