@@ -100,6 +100,6 @@ struct Grid<Cell, hnum, vnum, true>: GridBase<Cell, hnum, vnum> {
 template<class CellT, size_t hnum, size_t vnum>
 struct Grid<CellT, hnum, vnum, false>: GridBase<CellT, hnum, vnum> { };
 
-}
+} // namespace widgets
 
 #endif // !GRID_H

@@ -102,6 +102,6 @@ template<class T> struct _deinit<Initializer<T>> {
 };
 template<class T> using deinit = typename _deinit<T>::res;
 
-}
+} // namespace core
 
 #endif // !HOVERABLE_H

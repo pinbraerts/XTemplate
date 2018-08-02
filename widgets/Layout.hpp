@@ -59,6 +59,6 @@ struct Layout: RectangleShape, std::tuple<Widgets...> {
 template<class... Widgets> Layout(Widgets&&...) -> Layout<deinit<Widgets>...>;
 // template<class... Widgets> Layout(const RectangleShape& rsWidgets&&...) -> Layout<deinit<Widgets>...>;
 
-}
+} // namespace widgets
 
 #endif // !LAYOUT_H

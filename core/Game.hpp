@@ -115,6 +115,6 @@ public:
 
 template<class... Widgets> Game(Widgets&&... ws) -> Game<deinit<Widgets>...>;
 
-}
+} // namespace core
 
 #endif // !GAME_H

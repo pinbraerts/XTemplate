@@ -236,6 +236,6 @@ struct RoundShape: RectangleShape {
     }
 };
 
-}
+} // namespace core
 
 #endif // !SHAPE_H
