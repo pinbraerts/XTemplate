@@ -5,9 +5,8 @@
 
 #define mixin template<class Origin> struct
 #define umixin template<class Origin> using
-#define self_cast(CLS) static_cast<CLS&>(*this)
+#define self_cast(CLS) IfCV_cast<CLS&>(*this)
 #define self self_cast(Origin)
-#define cself self_cast(const Origin)
 
 namespace core {
 
