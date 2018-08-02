@@ -3,6 +3,9 @@
 
 #include "../core/DrawContext.hpp"
 
+using namespace core;
+namespace widgets {
+
 template<class Cell, size_t hnum, size_t vnum>
 struct GridBase: RectangleShape {
 public:
@@ -96,5 +99,7 @@ struct Grid<Cell, hnum, vnum, true>: GridBase<Cell, hnum, vnum> {
 
 template<class CellT, size_t hnum, size_t vnum>
 struct Grid<CellT, hnum, vnum, false>: GridBase<CellT, hnum, vnum> { };
+
+}
 
 #endif // !GRID_H

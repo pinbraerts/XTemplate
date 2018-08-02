@@ -3,6 +3,8 @@
 
 #include "../widgets/Layout.hpp"
 
+namespace core {
+
 template<class... Widgets>
 struct Game: Layout<Widgets...> {
 public:
@@ -112,5 +114,7 @@ public:
 };
 
 template<class... Widgets> Game(Widgets&&... ws) -> Game<deinit<Widgets>...>;
+
+}
 
 #endif // !GAME_H

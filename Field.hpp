@@ -4,6 +4,9 @@
 #include "widgets/Grid.hpp"
 #include "core/Hoverable.hpp"
 
+using namespace core;
+using namespace widgets;
+
 struct MyCell {
     struct Shape: RectangleShape {
         Shape(): RectangleShape { 0, 0, CELL_WIDTH, CELL_WIDTH } {}

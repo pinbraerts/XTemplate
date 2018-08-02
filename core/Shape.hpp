@@ -3,6 +3,8 @@
 
 #include "includes.hpp"
 
+namespace core {
+
 using Coord_t = float;
 using Size_t = float;
 
@@ -233,5 +235,7 @@ struct RoundShape: RectangleShape {
         return sqrt(tx * tx + ty * ty) < 1;
     }
 };
+
+}
 
 #endif // !SHAPE_H

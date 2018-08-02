@@ -4,6 +4,9 @@
 #include "core/Game.hpp"
 #include "Field.hpp"
 
+using namespace core;
+using namespace widgets;
+
 int main(int argc, char** argv) {
     Game game {
         Field { 20, 20 },

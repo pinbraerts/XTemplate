@@ -2,6 +2,9 @@
 #define LAYOUT_H
 
 #include "../core/Hoverable.hpp"
+using namespace core;
+
+namespace widgets {
 
 template<class... Widgets>
 struct Layout: RectangleShape, std::tuple<Widgets...> {
@@ -55,5 +58,7 @@ struct Layout: RectangleShape, std::tuple<Widgets...> {
 
 template<class... Widgets> Layout(Widgets&&...) -> Layout<deinit<Widgets>...>;
 // template<class... Widgets> Layout(const RectangleShape& rsWidgets&&...) -> Layout<deinit<Widgets>...>;
+
+}
 
 #endif // !LAYOUT_H

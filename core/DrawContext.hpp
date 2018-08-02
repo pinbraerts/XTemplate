@@ -3,6 +3,8 @@
 
 #include "Shape.hpp"
 
+namespace core {
+
 constexpr unsigned NUM = 10;
 constexpr unsigned SEGMENTS_NUM = NUM + 1;
 constexpr unsigned CELL_WIDTH = 20;
@@ -85,19 +87,6 @@ struct DrawContext {
     }
 };
 
-// template<class T, class Out> struct _ifcv;
-// template<class T, class Out> struct _ifcv<const T, Out> {
-//     using value = const Out;
-// };
-// template<class T, class Out> struct _ifcv<volatile T, Out> {
-//     using value = volatile Out;
-// };
-// template<class T, class Out> struct _ifcv<const volatile T, Out> {
-//     using value = const volatile Out;
-// };
-// template<class T, class Out> struct _ifcv<T, Out> {
-//     using value = Out;
-// };
-// template<class T, class Out> using IfCV = class _ifcv<T, Out>::value;
+} // namespace core
 
 #endif // !DRAW_CONTEXT_H

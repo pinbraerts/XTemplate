@@ -9,6 +9,8 @@
 #define self self_cast(Origin)
 #define cself self_cast(const Origin)
 
+namespace core {
+
 struct _fbase {
     mutable bool focused = false;
 
@@ -99,5 +101,7 @@ template<class T> struct _deinit<Initializer<T>> {
     using res = T;
 };
 template<class T> using deinit = typename _deinit<T>::res;
+
+}
 
 #endif // !HOVERABLE_H
