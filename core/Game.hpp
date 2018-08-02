@@ -3,6 +3,8 @@
 
 #include "../widgets/Layout.hpp"
 
+using namespace widgets;
+
 namespace core {
 
 template<class... Widgets>
