@@ -1,7 +1,9 @@
 #ifndef INITIALIZER_H
 #define INITIALIZER_H
 
-#include "Shape.hpp"
+#include "../geometry/Shape.hpp"
+
+using namespace geometry;
 
 namespace core {
 

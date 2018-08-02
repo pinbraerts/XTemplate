@@ -1,7 +1,9 @@
 #ifndef DRAW_CONTEXT_H
 #define DRAW_CONTEXT_H
 
-#include "Shape.hpp"
+#include "../geometry/Shape.hpp"
+
+using namespace geometry;
 
 namespace core {
 
