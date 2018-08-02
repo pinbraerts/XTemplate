@@ -84,24 +84,6 @@ mixin Clickable: _bbase {
 
 template<class T> constexpr bool is_clickable = std::is_convertible_v<T*, _bbase*>;
 
-template<class T>
-struct Initializer: RectangleShape {
-    using Type = T;
-    using RectangleShape::RectangleShape;
-};
-template<class T>
-struct Initializer<Initializer<T>>: Initializer<T> {};
-
-template<class T> bool is_initializer = std::is_base_of_v<T, Initializer<T>>;
-
-template<class T> struct _deinit {
-    using res = T;
-};
-template<class T> struct _deinit<Initializer<T>> {
-    using res = T;
-};
-template<class T> using deinit = typename _deinit<T>::res;
-
 } // namespace core
 
 #endif // !HOVERABLE_H

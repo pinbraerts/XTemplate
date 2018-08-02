@@ -2,6 +2,8 @@
 #define LAYOUT_H
 
 #include "../core/Hoverable.hpp"
+#include "../core/Initializer.hpp"
+
 using namespace core;
 
 namespace widgets {
