@@ -1,10 +1,14 @@
 PROG = ships.cpp
-OPTS = -lX11
+CXX = g++ -std=c++17
+LDFLAGS = -lX11 -lxtgeo
 
-all: main run
+all: | main run
 
-main:
-	g++ -o main $PROG $OPTS
+main: | geometry $(PROG)
+	$(CXX) -o main $(PROG) $(LDFLAGS)
+
+geometry: $(wildcard geometry/*.?pp)
+	$(MAKE) -C geometry
 
 run:
 	./main
