@@ -3,6 +3,7 @@
 
 #include "widgets/Grid.hpp"
 #include "core/Hoverable.hpp"
+#include "core/Initializer.hpp"
 
 using namespace core;
 using namespace widgets;
