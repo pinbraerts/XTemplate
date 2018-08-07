@@ -80,7 +80,7 @@ struct FieldBase: Grid<MyCell, NUM, NUM, true>,
         { 0, 0, cell_width(), cell_height() }
     } { }
 
-    bool clicked(Point cursor, Size_t btn) {
+    bool clicked(Point cursor, unsigned btn) {
         unsigned ox, oy;
         if(getCellIndex(cursor, ox, oy)) {
             auto& t = cells[ox][oy].type;
@@ -129,7 +129,7 @@ struct ButtonBase: RectangleShape, WidgetBase,
         const RectangleShape& other
     ): RectangleShape { other.clientRect(), Vector2D(other.size() / 2) } { }
 
-    bool clicked(const Point& cursor, Size_t btn) {
+    bool clicked(const Point& cursor, unsigned btn) {
         std::cout << "Clicked" << std::endl;
         return true;
     }
