@@ -4,6 +4,7 @@
 #include "widgets/Grid.hpp"
 #include "core/Hoverable.hpp"
 #include "core/Initializer.hpp"
+#include "core/WidgetBase.hpp"
 
 using namespace core;
 using namespace widgets;
@@ -70,7 +71,7 @@ struct FocusRect: RectangleShape {
 };
 
 struct FieldBase: Grid<MyCell, NUM, NUM, true>,
-    Hoverable<FieldBase>,
+    WidgetBase, Hoverable<FieldBase>,
     Clickable<FieldBase>, Focusable<FieldBase, FocusRect> {
     using Base = Grid<MyCell, NUM, NUM, true>;
     using FocusBase = Focusable<FieldBase, FocusRect>;
@@ -116,7 +117,7 @@ struct FieldBase: Grid<MyCell, NUM, NUM, true>,
 
 using Field = Initializer<FieldBase>;
 
-struct ButtonBase: RectangleShape,
+struct ButtonBase: RectangleShape, WidgetBase,
     Hoverable<ButtonBase>, Clickable<ButtonBase> {
     enum Color {
         Black = 0,
