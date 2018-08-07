@@ -10,21 +10,19 @@
 
 namespace core {
 
-struct _fbase {
-    mutable bool focused = false;
-
-    bool checkFocus(const Point& cursor) const {
-        return !focused;
-    }
-};
+struct _fbase { };
 
 template<class Origin, class Focus = Origin> struct Focusable: _fbase {
     Focus focus;
 
     Focusable(const Focus& f): focus(f) { }
 
+    bool checkFocus(const Point& cursor) const {
+        return !self.focused;
+    }
+
     void draw(DrawContext& dc) {
-        if(focused) focus.draw(dc);
+        if(self.focused) focus.draw(dc);
     }
 };
 
@@ -34,23 +32,21 @@ template<class T> constexpr bool is_focusable = std::is_convertible_v<T*, _fbase
 
 #define if_focus if constexpr(is_focusable<Origin>)
 
-struct _hovbase {
-    mutable bool hovered = false;
-};
+struct _hovbase { };
 
 mixin Hoverable: _hovbase {
     bool clip(const Point& cursor) {
-        bool res = hovered;
+        bool res = self.hovered;
         if(self.contains(cursor)) {
-            hovered = true;
+            self.hovered = true;
             res = !res;
             if_focus {
                 res = self.checkFocus(cursor) || res;
                 self.focused = true;
             }
-        } else if(hovered) {
+        } else if(self.hovered) {
             if_focus self.focused = false;
-            hovered = false;
+            self.hovered = false;
         }
         return res;
     }
@@ -58,21 +54,19 @@ mixin Hoverable: _hovbase {
 
 template<class T> constexpr bool is_hoverable = std::is_convertible_v<T*, _hovbase*>;
 
-struct _bbase {
-    mutable bool pressed = false;
-};
+struct _bbase { };
 
 mixin Clickable: _bbase {
     bool press(const Point& cursor, Size_t btn) {
         if(self.hovered) {
-            if(!pressed)
-                return pressed = true;
+            if(!self.pressed)
+                return self.pressed = true;
         }
         return false;
     }
     bool release(const Point& cursor, Size_t btn) {
-        if(pressed) {
-            pressed = false;
+        if(self.pressed) {
+            self.pressed = false;
             if(self.hovered)
                 return self.clicked(cursor, btn);
             else return true;
