@@ -48,6 +48,16 @@ private:
         ((clientRect() |= std::get<Ints>(*this)), ...);
     }
 
+    template<size_t... Ints>
+    inline bool _release(const Point& cursor, unsigned btn,
+        std::index_sequence<Ints...>) {
+        bool res = false;
+        ((is_clickable<std::tuple_element_t<Ints, Base>> ?
+            (res = std::get<Ints>(*this).release(cursor, btn) || res) :
+            false), ...);
+        return res;
+    }
+
 public:
     inline void join() {
         _join(IndicesSequence{});
@@ -65,18 +75,8 @@ public:
         return _press(cursor, btn, IndicesSequence{});
     }
 
-    template<size_t... Ints>
-    inline bool release(const Point& cursor, unsigned btn,
-        std::index_sequence<Ints...>) {
-        bool res = false;
-        ((is_clickable<std::tuple_element_t<Ints, Base>> ?
-            (res = std::get<Ints>(*this).release(cursor, btn) || res) :
-            false), ...);
-        return res;
-    }
-
     inline bool release(const Point& cursor, unsigned btn) {
-        return release(cursor, btn, IndicesSequence{});
+        return _release(cursor, btn, IndicesSequence{});
     }
 };
 
