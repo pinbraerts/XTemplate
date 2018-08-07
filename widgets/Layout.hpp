@@ -11,6 +11,7 @@ namespace widgets {
 template<class... Widgets>
 struct Layout: RectangleShape, std::tuple<Widgets...> {
     using Base = std::tuple<Widgets...>;
+    using IndicesSequence = std::index_sequence_for<Widgets...>;
 
     static constexpr size_t Length = sizeof...(Widgets);
 
@@ -18,48 +19,68 @@ struct Layout: RectangleShape, std::tuple<Widgets...> {
         join();
     }
 
-    template<size_t N = Length - 1>
+private:
+    template<size_t... Ints>
+    inline void _draw(DrawContext& dc, std::index_sequence<Ints...>) {
+        (std::get<Ints>(*this).draw(dc), ...);
+    }
+
+    template<size_t... Ints>
+    inline bool _clip(const Point& cursor, std::index_sequence<Ints...>) {
+        bool res = false;
+        ((is_hoverable<std::tuple_element_t<Ints, Base>> ?
+            (res = std::get<Ints>(*this).clip(cursor) || res) : false), ...);
+        return res;
+    }
+
+    template<size_t... Ints>
+    inline bool _press(const Point& cursor, unsigned btn,
+        std::index_sequence<Ints...>) {
+        bool res = false;
+        ((is_clickable<std::tuple_element_t<Ints, Base>> ?
+            (res = std::get<Ints>(*this).press(cursor, btn) || res) :
+            false), ...);
+        return res;
+    }
+
+    template<size_t... Ints>
+    inline void _join(std::index_sequence<Ints...>) {
+        ((clientRect() |= std::get<Ints>(*this)), ...);
+    }
+
+public:
     inline void join() {
-        clientRect() |= std::get<N>(*this).clientRect();
-        if constexpr(N) join<N - 1>();
+        _join(IndicesSequence{});
     }
 
-    template<size_t N = Length - 1>
     inline void draw(DrawContext& dc) {
-        std::get<N>(*this).draw(dc);
-        if constexpr(N) draw<N - 1>(dc);
+        _draw(dc, IndicesSequence{});
     }
 
-    template<size_t N = Length - 1>
     inline bool clip(const Point& cursor) {
+        return _clip(cursor, IndicesSequence{});
+    }
+
+    inline bool press(const Point& cursor, unsigned btn) {
+        return _press(cursor, btn, IndicesSequence{});
+    }
+
+    template<size_t... Ints>
+    inline bool release(const Point& cursor, unsigned btn,
+        std::index_sequence<Ints...>) {
         bool res = false;
-        if constexpr(is_hoverable<std::tuple_element_t<N, Base>>)
-            res = std::get<N>(*this).clip(cursor) || res;
-        if constexpr(N) return clip<N - 1>(cursor) || res;
+        ((is_clickable<std::tuple_element_t<Ints, Base>> ?
+            (res = std::get<Ints>(*this).release(cursor, btn) || res) :
+            false), ...);
         return res;
     }
 
-    template<size_t N = Length - 1>
-    inline bool press(const Point& cursor, Size_t btn) {
-        bool res = false;
-        if constexpr(is_clickable<std::tuple_element_t<N, Base>>)
-            res = std::get<N>(*this).press(cursor, btn) || res;
-        if constexpr(N) return press<N - 1>(cursor, btn) || res;
-        return res;
-    }
-
-    template<size_t N = Length - 1>
-    inline bool release(const Point& cursor, Size_t btn) {
-        bool res = false;
-        if constexpr(is_clickable<std::tuple_element_t<N, Base>>)
-            res = std::get<N>(*this).release(cursor, btn) || res;
-        if constexpr(N) return release<N - 1>(cursor, btn) || res;
-        return res;
+    inline bool release(const Point& cursor, unsigned btn) {
+        return release(cursor, btn, IndicesSequence{});
     }
 };
 
 template<class... Widgets> Layout(Widgets&&...) -> Layout<deinit<Widgets>...>;
-// template<class... Widgets> Layout(const RectangleShape& rsWidgets&&...) -> Layout<deinit<Widgets>...>;
 
 } // namespace widgets
 
