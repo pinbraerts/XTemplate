@@ -6,4 +6,3 @@ all: shared
 
 shared: $(GEOSRC) $(GEOHEAD)
 	$(CSL) -o libxtgeo.so $(GEOSRC)
-	mv libxtgeo.so /usr/lib/

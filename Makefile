@@ -1,14 +1,15 @@
-PROG = ships.cpp
+.POSIX:
+
 CXX = g++ -std=c++17
-LDFLAGS = -lX11 -lxtgeo
+LDFLAGS = -lX11 -lxtgeo -Lgeometry
 
-all: | main run
+all: ships
 
-main: | geometry $(PROG)
-	$(CXX) -o main $(PROG) $(LDFLAGS)
+ships: geometry ships.cpp
+	$(CXX) -o ships ships.cpp $(LDFLAGS)
 
 geometry: $(wildcard geometry/*.?pp)
 	$(MAKE) -C geometry
 
-run:
-	./main
+run: ships
+	LD_LIBRARY_PATH=geometry ./ships
